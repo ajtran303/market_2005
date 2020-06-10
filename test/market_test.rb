@@ -93,4 +93,16 @@ class MarketTest < MiniTest::Test
     assert_equal expected_items, market.sorted_item_list
   end
 
+  def test_it_knows_overstocked_items
+    @vendor3.stock(@item3, 10)
+
+    market = Market.new("South Pearl Street Farmers Market")
+
+    market.add_vendor(@vendor1)
+    market.add_vendor(@vendor2)
+    market.add_vendor(@vendor3)
+
+    assert_equal [@item1], market.overstocked_items
+  end
+
 end
