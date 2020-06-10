@@ -40,8 +40,9 @@ class MarketTest < MiniTest::Test
   end
 
   def test_it_has_attributes
+    Market.stubs(:get_date).returns("24/02/2020")
+
     market = Market.new("South Pearl Street Farmers Market")
-    market.stubs(:date).returns("24/02/2020")
 
     assert_equal "South Pearl Street Farmers Market", market.name
     assert_equal [], market.vendors
@@ -51,9 +52,7 @@ class MarketTest < MiniTest::Test
   def test_it_can_get_todays_date
     expected_date = Date.today.strftime("%d/%m/%y")
 
-    market = Market.new("South Pearl Street Farmers Market")
-
-    assert_equal expected_date, market.get_date
+    assert_equal expected_date, Market.get_date
   end
 
   def test_it_can_add_vendors

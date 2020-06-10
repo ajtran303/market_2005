@@ -3,14 +3,14 @@ require 'date'
 class Market
   attr_reader :name, :vendors, :date
 
+  def self.get_date
+    Date.today.strftime("%d/%m/%y")
+  end
+
   def initialize(name)
     @name = name
     @vendors = []
-    @date = get_date
-  end
-
-  def get_date
-    Date.today.strftime("%d/%m/%y")
+    @date = Market.get_date
   end
 
   def add_vendor(vendor)
@@ -36,12 +36,16 @@ class Market
   end
 
   def total_inventory
-    vendors.reduce(Hash.new { |market_inventory, item| market_inventory[item] = {quantity: 0, vendors: []} }) do |acc, vendor|
+    market_inventory = Hash.new do |market_inventory, item|
+      market_inventory[item] = {quantity: 0, vendors: []}
+    end
+
+    vendors.reduce(market_inventory) do |market, vendor|
       vendor.inventory.each do |vendor_item, quantity|
-        acc[vendor_item][:quantity] += quantity
-        acc[vendor_item][:vendors] << vendor
+        market[vendor_item][:quantity] += quantity
+        market[vendor_item][:vendors] << vendor
       end
-      acc
+      market
     end
   end
 
