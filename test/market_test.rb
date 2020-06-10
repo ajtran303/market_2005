@@ -1,5 +1,6 @@
 require "minitest/autorun"
 require "minitest/pride"
+require "mocha/minitest"
 require "./lib/market"
 require "./lib/item"
 require "./lib/vendor"
@@ -31,7 +32,7 @@ class MarketTest < MiniTest::Test
     @vendor3.stock(@item1, 65)
   end
 
-  def test_it_exists_with_attributes
+  def test_it_exists
     market = Market.new("South Pearl Street Farmers Market")
     #=> #<Market:0x00007fe134933e20...>
 
@@ -40,9 +41,19 @@ class MarketTest < MiniTest::Test
 
   def test_it_has_attributes
     market = Market.new("South Pearl Street Farmers Market")
+    market.stubs(:date).returns("24/02/2020")
 
     assert_equal "South Pearl Street Farmers Market", market.name
     assert_equal [], market.vendors
+    assert_equal "24/02/2020", market.date
+  end
+
+  def test_it_can_get_todays_date
+    expected_date = Date.today.strftime("%d/%m/%y")
+
+    market = Market.new("South Pearl Street Farmers Market")
+
+    assert_equal expected_date, market.get_date
   end
 
   def test_it_can_add_vendors
