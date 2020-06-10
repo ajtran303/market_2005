@@ -67,4 +67,11 @@ class MarketTest < MiniTest::Test
     assert_equal expected_names, market.vendor_names
   end
 
+  def test_it_knows_vendors_that_sell_item
+    market = Market.new("South Pearl Street Farmers Market")
+
+    assert_equal [@vendor1, @vendor3], market.vendors_that_sell(@item1)
+    assert_equal [@vendor2], market.vendors_that_sell(@item4)
+  end
+
 end
