@@ -10,8 +10,15 @@ class Vendor
     @inventory[item]
   end
 
-  def stock(item, amount)
-    @inventory[item] += amount
+  def stock(item, quantity)
+    @inventory[item] += quantity
+  end
+
+  def potential_revenue
+    inventory.reduce(0) do |revenue, (item, quantity)|
+      revenue += item.price * quantity
+      revenue
+    end
   end
 
 end
