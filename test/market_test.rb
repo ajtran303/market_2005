@@ -70,6 +70,10 @@ class MarketTest < MiniTest::Test
   def test_it_knows_vendors_that_sell_item
     market = Market.new("South Pearl Street Farmers Market")
 
+    market.add_vendor(@vendor1)
+    market.add_vendor(@vendor2)
+    market.add_vendor(@vendor3)
+
     assert_equal [@vendor1, @vendor3], market.vendors_that_sell(@item1)
     assert_equal [@vendor2], market.vendors_that_sell(@item4)
   end
