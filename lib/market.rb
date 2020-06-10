@@ -28,4 +28,14 @@ class Market
     end.sort.uniq
   end
 
+  def total_inventory
+    vendors.reduce(Hash.new { |market_inventory, item| market_inventory[item] = {quantity: 0, vendors: []} }) do |acc, vendor|
+      vendor.inventory.each do |vendor_item, quantity|
+        acc[vendor_item][:quantity] += quantity
+        acc[vendor_item][:vendors] << vendor
+      end
+      acc
+    end
+  end
+
 end
