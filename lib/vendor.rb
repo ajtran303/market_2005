@@ -15,9 +15,8 @@ class Vendor
   end
 
   def potential_revenue
-    inventory.reduce(0) do |revenue, (item, quantity)|
-      revenue += item.price * quantity
-      revenue
+    @inventory.sum do |item, quantity|
+      item.price * quantity
     end
   end
 
