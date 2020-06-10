@@ -38,4 +38,11 @@ class Market
     end
   end
 
+  def overstocked_items
+    total_inventory.reduce([]) do |overstock, (item, details)|
+      overstock << item if details[:quantity] > 50 && details[:vendors].size > 1
+      overstock
+    end
+  end
+
 end
