@@ -40,13 +40,14 @@ class Market
       market_inventory[item] = {quantity: 0, vendors: []}
     end
 
-    vendors.reduce(market_inventory) do |market, vendor|
+    vendors.each do |vendor|
       vendor.inventory.each do |vendor_item, quantity|
-        market[vendor_item][:quantity] += quantity
-        market[vendor_item][:vendors] << vendor
+        market_inventory[vendor_item][:quantity] += quantity
+        market_inventory[vendor_item][:vendors] << vendor
       end
-      market
     end
+
+    market_inventory
   end
 
   def overstocked_items
