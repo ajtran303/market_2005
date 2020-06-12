@@ -57,4 +57,30 @@ class Market
     end
   end
 
+  # 1. If the Market does not have enough of the
+  # item in stock to satisfy the given quantity,
+  # this method should return `false`.
+
+  def sell(item, total_quantity_to_sell)
+    market_can_sell_enough = (total_inventory[item][:quantity] - total_quantity_to_sell).positive?
+
+    if market_can_sell_enough
+      vendors_that_sell(item).each do |vendor|
+        vendor_can_sell_enough = (vendor.inventory[item] - total_quantity_to_sell).positive?
+        quantity_vendor_can_sell = vendor.inventory[item] % total_quantity_to_sell
+
+        if vendor_can_sell_enough
+          vendor.sell_stock(item, total_quantity_to_sell)
+        else
+          vendor.sell_stock(item, quantity_vendor_can_sell)
+          total_quantity_to_sell -= quantity_vendor_can_sell
+        end
+
+      end
+      true
+    else
+      false
+    end
+  end
+
 end

@@ -193,7 +193,19 @@ method:
 item in stock to satisfy the given quantity,
 this method should return `false`.
 
-2. If the Market's has enough of the item in stock to satisfy the given quantity, this method should return `true`. Additionally, this method should reduce the stock of the Vendors. It should look through the Vendors in the order they were added and sell the item from the first Vendor with that item in stock. If that Vendor does not have enough stock to satisfy the given quantity, the Vendor's entire stock of that item will be depleted, and the remaining quantity will be sold from the next vendor with that item in stock. It will follow this pattern until the entire quantity requested has been sold.
+2. If the Market's has enough of the item in
+stock to satisfy the given quantity, this
+method should return `true`. Additionally,
+this method should reduce the stock of the
+Vendors. It should look through the Vendors in
+the order they were added and sell the item from
+the first Vendor with that item in stock. If that
+Vendor does not have enough stock to satisfy the
+given quantity, the Vendor's entire stock of that
+item will be depleted, and the remaining quantity
+will be sold from the next vendor with that item
+in stock. It will follow this pattern until the
+entire quantity requested has been sold.
 
 For example, suppose vendor1 has 35 `peaches` and vendor3 has 65 `peaches`, and vendor1 was added to the market first. If the method `sell(<ItemXXX, @name = 'Peach'...>, 40)` is called, the method should return `true`, vendor1's new stock of `peaches` should be 0, and vendor3's new stock of `peaches` should be 60.
 
