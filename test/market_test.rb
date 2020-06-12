@@ -50,7 +50,7 @@ class MarketTest < MiniTest::Test
   end
 
   def test_it_can_get_todays_date
-    expected_date = Date.today.strftime("%d/%m/%y")
+    expected_date = Date.today.strftime("%d/%m/%Y")
 
     assert_equal expected_date, Market.get_date
   end

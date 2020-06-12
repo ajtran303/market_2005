@@ -4,7 +4,7 @@ class Market
   attr_reader :name, :vendors, :date
 
   def self.get_date
-    Date.today.strftime("%d/%m/%y")
+    Date.today.strftime("%d/%m/%Y")
   end
 
   def initialize(name)
@@ -57,30 +57,30 @@ class Market
     end
   end
 
-  # 1. If the Market does not have enough of the
-  # item in stock to satisfy the given quantity,
-  # this method should return `false`.
-
-  def sell(item, total_quantity_to_sell)
-    market_can_sell_enough = (total_inventory[item][:quantity] - total_quantity_to_sell).positive?
-
-    if market_can_sell_enough
-      vendors_that_sell(item).each do |vendor|
-        vendor_can_sell_enough = (vendor.inventory[item] - total_quantity_to_sell).positive?
-        quantity_vendor_can_sell = vendor.inventory[item] % total_quantity_to_sell
-
-        if vendor_can_sell_enough
-          vendor.sell_stock(item, total_quantity_to_sell)
-        else
-          vendor.sell_stock(item, quantity_vendor_can_sell)
-          total_quantity_to_sell -= quantity_vendor_can_sell
-        end
-
-      end
+  def sell(item, amount)
+    market_has_enough = (total_inventory[item][:quantity] - amount).positive?
+    return false unless market_has_enough
+    if market_has_enough
+      make_vendors_sell(item, amount)
       true
-    else
-      false
     end
   end
+
+  def make_vendors_sell(item, quantity)
+    vendors_that_sell(item).each do |vendor|
+      vendor_has_enough = (vendor.inventory[item] - quantity).positive?
+      quantity_can_sell = vendor.inventory[item] % quantity
+
+      if vendor_has_enough
+        vendor.sell_stock(item, quantity)
+      else
+        vendor.sell_stock(item, quantity_can_sell)
+        quantity -= quantity_can_sell
+      end
+
+    end
+  end
+  # this helper method was "pulled out of" the sell method above
+  # there is no test
 
 end
