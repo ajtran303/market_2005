@@ -20,4 +20,8 @@ class Vendor
     end
   end
 
+  def sell_stock(item, amount_to_sell)
+    @inventory[item] -= amount_to_sell
+  end
+
 end

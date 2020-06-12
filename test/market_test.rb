@@ -50,7 +50,7 @@ class MarketTest < MiniTest::Test
   end
 
   def test_it_can_get_todays_date
-    expected_date = Date.today.strftime("%d/%m/%y")
+    expected_date = Date.today.strftime("%d/%m/%Y")
 
     assert_equal expected_date, Market.get_date
   end
@@ -146,5 +146,67 @@ class MarketTest < MiniTest::Test
     assert_equal expected_inventory, market.total_inventory
   end
 
+  def test_it_can_sell
+    item1 = Item.new({name: 'Peach', price: "$0.75"})
+    item2 = Item.new({name: 'Tomato', price: '$0.50'})
+    item3 = Item.new({name: "Peach-Raspberry Nice Cream", price: "$5.30"})
+    item4 = Item.new({name: "Banana Nice Cream", price: "$4.25"})
+    item5 = Item.new({name: 'Onion', price: '$0.25'})
+
+    vendor1 = Vendor.new("Rocky Mountain Fresh")
+    vendor1.stock(item1, 35)
+    vendor1.stock(item2, 7)
+
+    vendor2 = Vendor.new("Ba-Nom-a-Nom")
+    vendor2.stock(item4, 50)
+    vendor2.stock(item3, 25)
+
+    vendor3 = Vendor.new("Palisade Peach Shack")
+    vendor3.stock(item1, 65)
+
+    market = Market.new("South Pearl Street Farmers Market")
+    market.add_vendor(vendor1)
+    market.add_vendor(vendor2)
+    market.add_vendor(vendor3)
+
+    assert_equal false, market.sell(item1, 200) # 100 item1's
+    assert_equal false, market.sell(item5, 1) # 0 item5's
+
+    assert_equal true, market.sell(item4, 5) # 50 item4's - sell 5
+    assert_equal 45, vendor2.check_stock(item4) # now 45
+
+    assert_equal true, market.sell(item1, 40) # 100 item1's - sell 40
+    assert_equal 0, vendor1.check_stock(item1) # vendor1 sells first 35
+    assert_equal 60, vendor3.check_stock(item1) # vendor3 sells last 5
+  end
 
 end
+
+
+=begin
+Add a method to your Market class called `sell`
+that takes an item and a quantity as arguments.
+There are two possible outcomes of the `sell`
+method:
+
+1. If the Market does not have enough of the
+item in stock to satisfy the given quantity,
+this method should return `false`.
+
+2. If the Market's has enough of the item in
+stock to satisfy the given quantity, this
+method should return `true`. Additionally,
+this method should reduce the stock of the
+Vendors. It should look through the Vendors in
+the order they were added and sell the item from
+the first Vendor with that item in stock. If that
+Vendor does not have enough stock to satisfy the
+given quantity, the Vendor's entire stock of that
+item will be depleted, and the remaining quantity
+will be sold from the next vendor with that item
+in stock. It will follow this pattern until the
+entire quantity requested has been sold.
+
+For example, suppose vendor1 has 35 `peaches` and vendor3 has 65 `peaches`, and vendor1 was added to the market first. If the method `sell(<ItemXXX, @name = 'Peach'...>, 40)` is called, the method should return `true`, vendor1's new stock of `peaches` should be 0, and vendor3's new stock of `peaches` should be 60.
+
+=end
